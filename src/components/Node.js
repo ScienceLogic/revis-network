@@ -94,6 +94,7 @@ export default class Node {
     const innerLabelColor = style.innerLabelColor || fontColor;
     const lineWidth = style.lineWidth / state.scale;
     const opacity = style.opacity || 1;
+    const bulletStyle = state?.options?.nodes?.nodeFillStyle === 'bullet';
 
     // DRAW the main shape
     const ctx = context;
@@ -102,7 +103,7 @@ export default class Node {
     ctx.translate(this.x - size / 2, this.y - size / 2); // traslate to a left top that will center the drawing
 
     ctx.lineWidth = lineWidth;
-    ctx.fillStyle = fill;
+    ctx.fillStyle = bulletStyle ? stroke : fill;
     ctx.strokeStyle = stroke;
 
     ctx.beginPath();
@@ -119,7 +120,7 @@ export default class Node {
     ctx.stroke();
 
     // image
-    if (state.scale > 0.3) {
+    if (state.scale > 0.3 && !bulletStyle) {
       drawImage(ctx, this.definition, images, size);
     }
 
