@@ -9,7 +9,7 @@ import React, {
   useMemo,
 } from 'react';
 import uuid from 'uuid';
-import { merge } from 'lodash';
+import { isEqual, merge } from 'lodash';
 import {
   getBounds,
   getBoundsScale,
@@ -73,9 +73,8 @@ const ReVisNetwork = (props: Props) => {
     shapes,
     callbackFn,
     shouldRunLayouter,
+    layouter = defaultLayout,
   } = props;
-
-  const layouter = props.layouter || defaultLayout;
 
   const { psState, panScaleDispatch } = usePanScale();
   const { interactionState, interactionDispatch } = useInteraction();
@@ -96,6 +95,7 @@ const ReVisNetwork = (props: Props) => {
   const nodes = useRef(new Map());
   const edges = useRef(new Map());
   const shapesRef = useRef();
+  const lastLayouterResult = useRef(props.layouter);
 
   const baseCanvas = useRef(null);
   const [screenState, setScreenState] = useState({
@@ -581,7 +581,9 @@ const ReVisNetwork = (props: Props) => {
   const runLayout = useCallback(() => {
     interactionDispatch({ type: 'runLayout' });
     if (!nodes.current) return false;
-    layouter(
+    if (lastLayouterResult?.current?.stop );
+    lastLayouterResult?.current?.stop && lastLayouterResult.current.stop();
+    lastLayouterResult.current = layouter(
       {
         nodeMap: nodes.current,
         edgeMap: edges.current,
@@ -620,6 +622,7 @@ const ReVisNetwork = (props: Props) => {
               const from = n.from.toString();
               const toFrom = [to, from].sort().join('-');
               let dupNumber = 0;
+              
               if (dupMap[toFrom] !== undefined) {
                 dupNumber = dupMap[toFrom] + 1;
                 dupMap[toFrom] = dupNumber;
@@ -676,7 +679,6 @@ const ReVisNetwork = (props: Props) => {
       shapesRef.current = nextShapes;
 
       const dirty = nodesDirty || edgesDirty;
-
       if (dirty || shouldRunLayouterResult) {
         runLayout();
       }
@@ -705,10 +707,19 @@ const ReVisNetwork = (props: Props) => {
     setOptionState(merge(optionState, options));
   }, [options]);
 
-  // when layout or layout options change, run the layout again
+  // when layout or layout options actually change, run the layout again
+  const lastLayoutOptions = useRef({});
+  useEffect(() => {
+    if (!isEqual(options.layoutOptions, lastLayoutOptions.current)) {
+      lastLayoutOptions.current = options.layoutOptions
+      runLayout();
+    }
+  }, [options?.layoutOptions]);
+
+  // run the layouter whenever it changes
   useEffect(() => {
     runLayout();
-  }, [options?.layoutOptions, layouter]);
+  }, [layouter]);
 
   if (nodes.current && edges.current) {
     return (

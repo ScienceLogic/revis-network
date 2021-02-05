@@ -21,7 +21,7 @@ export default class Edge {
     if (!this.start || !this.end) {
       return { x: 0, y: 0 };
     }
-    const dn = this.dupNumber > 0 ? this.dupNumber - 2 : 0;
+    const dn = this.dupNumber || 0;
     const cp = {
       x: this.end.x + (this.end.x > this.start.x ? 1 : -1) * dn * 20,
       y: this.start.y - (this.end.y > this.start.y ? 1 : -1) * dn * 20,
