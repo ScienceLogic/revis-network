@@ -23,7 +23,7 @@
     "predeploy": "cd example && yarn install && yarn run build",
     "deploy": "gh-pages -d example/build",
     "storybook": "start-storybook -p 9009",
-    "build-storybook": "build-storybook -o docs-build"
+    "build-storybook": "build-storybook",
     "deploy-storybook": "storybook-to-ghpages"
   },
   "peerDependencies": {
