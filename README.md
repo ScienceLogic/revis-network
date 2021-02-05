@@ -30,9 +30,7 @@ We find that node icons are often re-used so they can be supplied seperately eit
   offsetY: how may pixels at scale of 1 to move the icon vertically
 
 }
-
-``
-
+```
 
 ### Edges: 
 An arry of json objects that, at the very least have the following properties
@@ -53,13 +51,7 @@ Support for a react component to be used when a node or edge is hovered is suppl
 
 
 ### Other Props and Options
+Coming Soon
 
-
-
-
-## Install and run Storybook
-
-```
-yarn
-yarn storybook
-```
+## Install dependencies and run Storybook
+`yarn && yarn storybook`
