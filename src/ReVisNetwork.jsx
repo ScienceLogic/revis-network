@@ -9,7 +9,7 @@ import React, {
   useMemo,
 } from 'react';
 import uuid from 'uuid';
-import { isEqual, merge } from 'lodash';
+import { isEqual, merge, cloneDeep } from 'lodash';
 import {
   getBounds,
   getBoundsScale,
@@ -86,7 +86,7 @@ const ReVisNetwork = (props: Props) => {
   });
   const [rolloverState, setRolloverState] = useState(null);
   const [optionState, setOptionState] = useState(
-    merge(defaultOptions, options || {}),
+    merge({}, defaultOptions, options || {}),
   );
 
   const hoverTimer = useRef(null);
@@ -371,11 +371,6 @@ const ReVisNetwork = (props: Props) => {
           break;
         }
         case 'dblclick': {
-          if (optionState.blockGraphInteraction) {
-            om && om('dblclick', payload.pos);
-            break;
-          }
-
           // check node collision
           const n = getNodeAtPosition(nodes.current, payload.pos);
           if (n) {
@@ -436,6 +431,7 @@ const ReVisNetwork = (props: Props) => {
       optionState,
     );
     panScaleDispatch({ type: 'set', payload: st });
+    if (e) e.stopPropagation();
   };
 
   const resize = (t) => {
@@ -581,7 +577,7 @@ const ReVisNetwork = (props: Props) => {
   const runLayout = useCallback(() => {
     interactionDispatch({ type: 'runLayout' });
     if (!nodes.current) return false;
-    if (lastLayouterResult?.current?.stop );
+    if (lastLayouterResult?.current?.stop);
     lastLayouterResult?.current?.stop && lastLayouterResult.current.stop();
     lastLayouterResult.current = layouter(
       {
@@ -622,7 +618,7 @@ const ReVisNetwork = (props: Props) => {
               const from = n.from.toString();
               const toFrom = [to, from].sort().join('-');
               let dupNumber = 0;
-              
+
               if (dupMap[toFrom] !== undefined) {
                 dupNumber = dupMap[toFrom] + 1;
                 dupMap[toFrom] = dupNumber;
@@ -711,7 +707,7 @@ const ReVisNetwork = (props: Props) => {
   const lastLayoutOptions = useRef({});
   useEffect(() => {
     if (!isEqual(options.layoutOptions, lastLayoutOptions.current)) {
-      lastLayoutOptions.current = options.layoutOptions
+      lastLayoutOptions.current = options.layoutOptions;
       runLayout();
     }
   }, [options?.layoutOptions]);

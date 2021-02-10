@@ -3,6 +3,7 @@ const options = {
     showLabels: true,
     defaultSize: 30,
     scaleCompensation: false,
+    nodeFillStyle: 'default', // default or bullet
   },
   edges: {
     showLabels: true,
