@@ -1,6 +1,6 @@
 {
   "name": "@sciencelogic/revis-network",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Network visualization engine with demo build on react-transform-boilerplate template.",
   "author": "jonmodell<jon@jonmodell.com>",
   "license": "MIT",
