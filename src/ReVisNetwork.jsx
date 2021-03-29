@@ -9,7 +9,7 @@ import React, {
   useMemo,
 } from 'react';
 import uuid from 'uuid';
-import { isEqual, merge, cloneDeep } from 'lodash';
+import { isEqual, merge } from 'lodash';
 import {
   getBounds,
   getBoundsScale,
@@ -585,7 +585,7 @@ const ReVisNetwork = (props: Props) => {
         edgeMap: edges.current,
         shapes: shapesRef.current,
       },
-      optionState.layoutOptions,
+      optionState?.layoutOptions || {},
       screen(),
       zoomToFit,
     );
@@ -593,7 +593,7 @@ const ReVisNetwork = (props: Props) => {
   }, [
     interactionDispatch,
     layouter,
-    optionState.layoutOptions,
+    optionState?.layoutOptions,
     screen,
     zoomToFit,
     nodes,
@@ -706,8 +706,8 @@ const ReVisNetwork = (props: Props) => {
   // when layout or layout options actually change, run the layout again
   const lastLayoutOptions = useRef({});
   useEffect(() => {
-    if (!isEqual(options.layoutOptions, lastLayoutOptions.current)) {
-      lastLayoutOptions.current = options.layoutOptions;
+    if (!isEqual(options?.layoutOptions, lastLayoutOptions.current)) {
+      lastLayoutOptions.current = options?.layoutOptions || {};
       runLayout();
     }
   }, [options?.layoutOptions]);

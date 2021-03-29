@@ -52,7 +52,7 @@ const edgeRenderer = () => {
 };
 
 export const Drawing = () => {
-  const blockGraphInteraction = boolean('Edit Drawings', false);
+  const editShapes = boolean('Edit Drawings', false);
   const addHandler = () => {
     shapeData = [
       ...shapeData,
@@ -108,7 +108,10 @@ export const Drawing = () => {
         images={iconMap}
         nodeDrawingFunction={nodeDrawing}
         options={{
-          blockGraphInteraction,
+          interaction: {
+            allowGraphInteraction: !editShapes,
+            allowShapeInteraction: editShapes,
+          },
           nodes: {
             defaultSize: 60,
           },
